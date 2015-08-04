@@ -41,7 +41,17 @@ class MenuFolder extends Element implements MenuItemInterface, IdentityFinder
 
         $this->menuItemCollection = new MenuItemCollection;
         
-        $this->menuItemCollection->setIdentity( $identity ?: crc32(microtime()) );
+        $this->setIdentity( $identity ?: crc32(microtime()) );
+    }
+
+    public function setIdentity($identity)
+    {
+        $this->identity = $identity;
+    }
+
+    public function getIdentity()
+    {
+        return $this->identity;
     }
 
     public function setLabel($label)
@@ -74,6 +84,8 @@ class MenuFolder extends Element implements MenuItemInterface, IdentityFinder
                 if ($result = $menuItem->findById($identity)) {
                     return $result;
                 }
+            } else if ( $this->getIdentity() === $identity ) {
+                return $item;
             }
         }
     }
